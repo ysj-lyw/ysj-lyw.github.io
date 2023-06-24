@@ -1,0 +1,270 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>  Kafka中Eagle运维监控 |    white.</title>
+  <meta name="description" content="A minimalist theme for hexo.">
+  <!-- 标签页图标 -->
+  
+
+  <!-- 图标库 -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+  <!-- 动画库 -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fushaolei/cdn-white@1.0/css/animate.css"/>
+  
+  <!-- css文件 -->
+  
+<link rel="stylesheet" href="/css/white.css">
+
+  <!-- 代码高亮 -->
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+
+<div class="menu-outer">
+    <div class="menu-inner">
+      <div class="menu-site-name  animate__animated  animate__fadeInUp">
+        <a href="/">
+          white.
+        </a>
+        
+      </div>
+      <div class="menu-group">
+        <ul class="menu-ul">
+        
+          <a href="/" class="nav-link">
+            <li class="menu-li  animate__animated  animate__fadeInUp">
+              HOME
+            </li>
+          </a>
+        
+          <a href="/archives" class="nav-link">
+            <li class="menu-li  animate__animated  animate__fadeInUp">
+              BLOG
+            </li>
+          </a>
+        
+        
+        
+          <li class="menu-li animate__animated  animate__fadeInUp" id="mobile-menu">
+            <i class="ri-menu-line"></i>
+          </li>
+        
+        </ul>
+
+      </div>
+
+    </div>
+</div>
+<div id="mobile-main" class="animate__animated  animate__fadeIn">
+  <div class="mobile-menu-inner">
+    <div class="mobile-menu-site-name animate__animated  animate__fadeInUp">
+      <a href="/">
+        white.
+      </a>
+    </div>
+    <div class="mobile-menu-group" id="mobile-close">
+      <i class="ri-close-line"></i>
+    </div>
+
+  </div>
+
+  <div class="mobile-menu-div">
+  
+    <a href="/" class="mobile-nav-link">
+      <div class="mobile-menu-child animate__animated  animate__fadeInUp">
+        <span>HOME</span>
+      </div>
+    </a>
+  
+    <a href="/archives" class="mobile-nav-link">
+      <div class="mobile-menu-child animate__animated  animate__fadeInUp">
+        <span>BLOG</span>
+      </div>
+    </a>
+  
+  
+  </div>
+
+
+</div>
+
+<div class="body-outer">
+  <div class="body-inner">
+    
+<article class="post-inner">
+  <div class="post-content-outer">
+    <div class="post-intro">
+      <div class="post-title animate__animated  animate__fadeInUp">Kafka中Eagle运维监控</div>
+      <div class="meta-intro animate__animated  animate__fadeInUp">Jun 21 2023</div>
+      
+    </div>
+    <div class="post-content-inner">
+      <div class="post-content-inner-space">
+
+      </div>
+      <div class="post-content-main animate__animated  animate__fadeInUp">
+        <!-- top型目录 -->
+        
+        <p>一、概述</p>
+<p>Kafka-eagle是一个为了简化开发者和服务工程师维护Kafka集群工作的监控管理工具。这个管理工具可以很容易地发现分布在集群中的哪些topic分布不均匀，或者是分区在整个集群分布不均匀的的情况。它支持管理多个集群、选择副本、副本重新分配以及创建Topic。同时，这个管理工具还可以快速浏览整个集群。</p>
+<p>Kafka Eagle所包含的功能有数据面板、数据大屏、主题列表、消费者组、集群详情、监控中心、告警策略、系统管理等功能</p>
+<p>二、安装部署</p>
+<p>1、环境需求</p>
+<p>需要安装JDK、ZooKeeper和Kafka。</p>
+<p>2、上传安装包并解压</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="http://download.kafka-eagle.org/">http://download.kafka-eagle.org/</a><br>下载完成后上传到&#x2F;export&#x2F;server开始解压 tar -zxvf kafka-eagle-web-2.0.2-bin.tar.gz -C ..&#x2F;servers</p>
+<p>cd &#x2F;export&#x2F;servers&#x2F; kafka-eagle-web-2.0.2&#x2F;tar -zxvf kafka-eagle-web-2.0.2bin.tar.gz&#96;</p>
+<p>3、修改环境变量</p>
+<p>JAVA_HOME 和 KE_HOME</p>
+<p>vi &#x2F;etc&#x2F;profile</p>
+<p>export JAVA_HOME&#x3D;&#x2F;usr&#x2F;java&#x2F;jdk1.8</p>
+<p>export PATH&#x3D;PATH:JAVA_HOME&#x2F;bin</p>
+<p>export KE_HOME&#x3D;&#x2F;export&#x2F;server&#x2F;kafka-eagle</p>
+<p>export PATH&#x3D;PATH:KE_HOME&#x2F;bin</p>
+<p>4、 配置 KafkaEagle</p>
+<p>cd &#x2F;export&#x2F;server&#x2F;kafka-eagle&#x2F;conf</p>
+<p>vi system-config.properties</p>
+<p>l 需要更改的地方：</p>
+<p>kafka.eagle.zk.cluster.alias&#x3D;cluster1</p>
+<p>cluster1.zk.list&#x3D;node1:2181,node2:2181,node3:2181</p>
+<p>cluster1.kafka.eagle.broker.size&#x3D;3</p>
+<p>kafka.eagle.url&#x3D;jdbc:sqlite:&#x2F;export&#x2F;data&#x2F;db&#x2F;ke.db</p>
+<p>5、启动前需要手动创建&#x2F;export&#x2F;data&#x2F;db目录</p>
+<p>mkdir &#x2F;export&#x2F;data&#x2F;db</p>
+<p>6、启动Eagle</p>
+<p> &#x2F;export&#x2F;server&#x2F;kafka-eagle&#x2F;bin&#x2F;ke.sh start</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/Eagle/1.png" >
+        </sapn>
+      </p>
+<p>三、使用Eagle</p>
+<p>该模块包含主题创建、主题管理、主题预览、KSQL查询主题、主题数据写入、主题属性配置等。</p>
+<p>1、BScreen 总览</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/eagle/2.png" >
+        </sapn>
+      </p>
+<p>进入kafka eagle ，显示仪表盘包括以下几个选项：Brokers、Topics、Zookeepers、Consumers、Kafka Brokers Graph</p>
+<p>2、话题信息</p>
+<p>Topic目录下选项可以完成(当前注册集群的)topic新建和topic查询，并且提供kafka SQL查询工具;</p>
+<p>Creat创建topic;</p>
+<p>List:罗列出所有当前注册集群下的所有topic列表，每个topic的分区数、分区列表、创建时间、修改时间、并提供删除选项；</p>
+<p>Message提供Kafka SQL可以从分区、偏移量、topic名称查数据；</p>
+<p>Mock向指定的topic发送模拟数据；</p>
+<p>Consumer显示当前注册集群的消费组信息;</p>
+<h2 id="数据大屏"><a href="#数据大屏" class="headerlink" title="数据大屏"></a>数据大屏</h2><p>该模块包含展示消费者和生产者当日及最近7天趋势、Kafka集群读写速度、Kafka集群历史总记录等。</p>
+<h2 id="消费者组"><a href="#消费者组" class="headerlink" title="消费者组"></a>消费者组</h2><p>该模块包含监控不同消费者组中的Topic被消费的详情，例如LogSize、Offsets、以及Lag等。同时，支持查看Lag的历史趋势图。</p>
+<h2 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h2><p>该模块包含Kafka集群和Zookeeper集群的详情展示，例如Kafka的IP和端口、版本号、启动时间、Zookeeper的Leader和Follower。同时，还支持多Kafka集群切换，以及Zookeeper Client数据查看等功能。</p>
+<h2 id="指标监控"><a href="#指标监控" class="headerlink" title="指标监控"></a>指标监控</h2><p>该模块包含监控Kafka集群和Zookeeper集群的核心指标，包含Kafka的消息发送趋势、消息大小接收与发送趋势、Zookeeper的连接数趋势等。同时，还支持查看Broker的瞬时指标数据。</p>
+<h2 id="告警"><a href="#告警" class="headerlink" title="告警"></a>告警</h2><p>该模块包含告警集群异常和消费者应用Lag异常。同时，支持多种IM告警方式，例如邮件、钉钉、微信、Webhook等。</p>
+<h2 id="系统管理"><a href="#系统管理" class="headerlink" title="系统管理"></a>系统管理</h2><p>该模块包含用户管理，例如创建用户、用户授权、资源管理等。</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/eagle/5.jpg" >
+        </sapn>
+      </p>
+<p>3、集群信息</p>
+<p>Muti-Cluster显示后台注册的kafka集群，可以同时管理多套kafka集群;</p>
+<p>ZKCli将ZKCli移植到网页上执行;</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/eagle/3.jpg" >
+        </sapn>
+      </p>
+<p>4、metrics信息</p>
+<p>Metric通过kafka的JMX端口，实现了Kafka的监控指标，并图表化展示，监控指标包括读写的TPS、比特数、分区间同步的比特数等；</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/eagle/4.jpg" >
+        </sapn>
+      </p>
+<p>5、system系统信息</p>
+<p>用户管理提供三种角色(用户群)：admin、开发组、游客，可以分别编辑设定每种用户群的权限；</p>
+<p>Kafka Eagle的mysql表在Kafka-Eagle配置文件system-config.properties中添加mysql的信息后，KE会自动在对应的模式内创建元数据表；</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/eagle/6.jpg" >
+        </sapn>
+      </p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="/../image/Eagle/7.jpg" >
+        </sapn>
+      </p>
+
+        <!-- 分类文章 -->
+        
+      </div>
+      <div class="post-content-inner-space">
+        
+          <div class="space-toc-main animate__animated  animate__fadeInUp">
+            <ol class="space-toc"><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%A7%E5%B1%8F"><span class="space-toc-text">数据大屏</span></a></li><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="space-toc-text">消费者组</span></a></li><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="space-toc-text">集群管理</span></a></li><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E6%8C%87%E6%A0%87%E7%9B%91%E6%8E%A7"><span class="space-toc-text">指标监控</span></a></li><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E5%91%8A%E8%AD%A6"><span class="space-toc-text">告警</span></a></li><li class="space-toc-item space-toc-level-2"><a class="space-toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86"><span class="space-toc-text">系统管理</span></a></li></ol>
+           </div>
+        
+      </div>
+   </div>
+    <!-- 评论 -->
+    
+  </div>
+</article>
+  </div>
+</div>
+
+
+
+<!-- 如果是home模式的话，不在首页就显示footer，如果不是home模式的话 所有都显示footer -->
+
+  <div class="footer-outer animate__animated  animate__fadeInUp">
+    <div class="footer-inner">
+    <div class="footer-text">
+    <p>Power by <a target="_blank" rel="noopener" href="http://hexo.io/">Hexo</a> Theme by <a target="_blank" rel="noopener" href="https://github.com/FuShaoLei/hexo-theme-white">White</a></p>
+
+    </div>
+    <div class="footer-contact">
+    <ul class="footer-ul">
+        
+        <li class="footer-li">
+            <a href="https://github.com/FuShaoLei/hexo-theme-white" target="_blank">
+                <i class="ri-github-line"></i>
+            </a>
+        </li>
+        
+        <li class="footer-li">
+            <a href="mailto:1563250958@qq.com" target="_blank">
+                <i class="ri-mail-line"></i>
+            </a>
+        </li>
+        
+    </ul>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="/js/white.js"></script>
+
+
+
+</body>
+</html>
